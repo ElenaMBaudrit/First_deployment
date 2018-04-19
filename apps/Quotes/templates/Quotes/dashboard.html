@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Quotes Dashboard</title>
+    </head>
+    <body>
+        <a href='/Quotes/logout'>Logout</a> 
+        <h1>Hello, {{ request.session.name }}</h1>
+        <div id="left_side">
+            <h2> Quotable quotes </h2>
+            <ul>
+                {% for quote in others_quotes %}
+                <li>{{ quote.author }}: {{ quote.description }}</li>
+                <form action='/Quotes/remove_from_list' method='post'>
+                    {% csrf_token %}
+                    <li>Posted by <href = ''>{{ quote.creator.name }}</href> | <input type="submit" value="Remove from my list"></li>
+                </form>
+                {% endfor %}
+            </ul>
+        </div>
+        <div id='right_side'>
+            <h2> Your favourites </h2>
+            <ul>
+                {% for quote in my_quotes %}
+                <li>{{ quote.author }}: {{ quote.description }}</li>
+                <form action='/Quotes/add_to_list' method='post'>
+                    {% csrf_token %}
+                <li>Posted by <href = '/Quotes/add_to_list/{{user.id}}'> {{ quote.creator.name }}</href> | <input type="submit" value="Add to my list"></li>
+                </form>
+                {% endfor %}
+            </ul>
+            Contribute a Quote:
+            {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        <form action='/Quotes/create_post' method='post'>
+            {% csrf_token %}
+            <a>Quoted By: <input type ='textbox' name = "author"></a>
+            <a>Message: <input type = 'textbox' name = "description"></a>
+            <input type= 'submit' value='Submit'>
+            
+        </div>
+    </body>
+</html>
